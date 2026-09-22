@@ -11,144 +11,361 @@
             box-sizing: border-box;
             font-family: "Microsoft YaHei", system-ui, sans-serif;
         }
+
         :root {
             --main: #2c423b;
             --light: #f7f7f2;
             --accent: #689788;
+            --gold: #d4af37;
+            --card: #ffffff;
+            --text: #2c423b;
+            --subtext: #555555;
+            --border: rgba(104, 151, 136, 0.25);
+            --shadow: 0 10px 30px rgba(44, 66, 59, 0.12);
+            --glow: rgba(212, 175, 55, 0.35);
         }
+
+        body.night {
+            --main: #e8f5ee;
+            --light: #0b1418;
+            --accent: #7ee8c4;
+            --gold: #ffd86b;
+            --card: #132128;
+            --text: #e8f5ee;
+            --subtext: #b8d7c7;
+            --border: rgba(126, 232, 196, 0.4);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            --glow: rgba(126, 232, 196, 0.45);
+        }
+
         html {
             scroll-behavior: smooth;
         }
+
         body {
             background-color: var(--light);
-            color: var(--main);
+            color: var(--text);
             line-height: 1.7;
+            transition: background-color 0.6s ease, color 0.6s ease;
+            overflow-x: hidden;
         }
-        /* 滚动淡入动画 */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 20%, var(--glow) 0, transparent 25%),
+                radial-gradient(circle at 80% 10%, var(--glow) 0, transparent 28%),
+                radial-gradient(circle at 50% 80%, var(--glow) 0, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            transition: opacity 0.6s ease;
+        }
+
+        body.night::before {
+            opacity: 1;
+        }
+
         .reveal {
             opacity: 0;
-            transform: translateY(32px);
-            transition: all 0.7s ease-out;
+            transform: translateY(40px);
+            transition: all 0.9s ease-out;
         }
+
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
+
         header {
             position: fixed;
             width: 100%;
             top: 0;
-            background: rgba(247,247,242,0.85);
-            backdrop-filter: blur(8px);
-            z-index:99;
-            padding:1rem 10%;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
+            background: rgba(247, 247, 242, 0.75);
+            backdrop-filter: blur(12px);
+            z-index: 99;
+            padding: 1rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.6s ease, border-color 0.6s ease;
         }
-        .brand{
-            font-size:20px;
-            font-weight:600;
-            text-decoration:none;
-            color:var(--main);
+
+        body.night header {
+            background: rgba(11, 20, 24, 0.8);
         }
-        nav a{
-            margin-left:24px;
-            color:var(--main);
-            text-decoration:none;
-            transition: color 0.3s;
+
+        .brand {
+            font-size: 21px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--main);
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
-        nav a:hover{
-            color:var(--accent);
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
-        section{
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 99px;
+            border: 1px solid transparent;
+            transition: all 0.35s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+            border-color: var(--border);
+            background: rgba(104, 151, 136, 0.08);
+        }
+
+        body.night nav a:hover {
+            background: rgba(126, 232, 196, 0.08);
+        }
+
+        .mode-toggle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+        }
+
+        .mode-toggle:hover {
+            transform: rotate(20deg) scale(1.08);
+            box-shadow: 0 0 25px var(--glow);
+        }
+
+        section {
             padding: 120px 10%;
-            min-height:100vh;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
         }
-        .hero{
-            display:grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap:40px;
-            align-items:center;
-            padding-top:180px;
+
+        .hero {
+            padding-top: 180px;
         }
-        .hero h1{
-            font-size:56px;
-            margin-bottom:12px;
-            animation: fadeUp 1s ease-out;
+
+        .hero h1 {
+            font-size: 64px;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            background: linear-gradient(120deg, var(--main), var(--accent), var(--gold));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s ease-in-out infinite;
         }
-        .hero .sub{
-            font-size:20px;
-            color:#555;
-            margin-bottom:30px;
-            animation: fadeUp 1s ease-out 0.2s backwards;
+
+        .hero .sub {
+            font-size: 22px;
+            color: var(--subtext);
+            margin-bottom: 30px;
         }
-        .avatar-box{
-            width:320px;
-            height:320px;
-            border-radius:20px;
-            overflow:hidden;
-            box-shadow:0 12px 30px rgba(44,66,59,0.15);
-            transition:transform 0.4s ease;
-            animation: fadeUp 1s ease-out 0.4s backwards;
-        }
-        .avatar-box:hover{
-            transform: translateY(-8px);
-        }
-        .avatar-box img{
-            width:100%;
-            height:100%;
-            object-fit:cover;
-        }
-        @keyframes fadeUp{
-            from{
-                opacity:0;
-                transform: translateY(24px);
+
+        @keyframes shine {
+            0%, 100% {
+                background-position: 0% 50%;
             }
-            to{
-                opacity:1;
-                transform: translateY(0);
+            50% {
+                background-position: 100% 50%;
             }
         }
-        h2{
-            font-size:32px;
-            margin-bottom:24px;
-            color:var(--main);
+
+        h2 {
+            font-size: 34px;
+            margin-bottom: 14px;
+            color: var(--main);
+            position: relative;
+            display: inline-block;
         }
-        .skill-list{
-            display:grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-            gap:20px;
+
+        h2::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 60px;
+            height: 4px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
         }
-        .skill-card{
-            background:#fff;
-            padding:24px;
-            border-radius:16px;
-            box-shadow:0 4px 14px rgba(0,0,0,0.06);
-            transition:0.3s;
+
+        .section-desc {
+            color: var(--subtext);
+            margin-bottom: 36px;
+            max-width: 820px;
         }
-        .skill-card:hover{
-            transform: translateY(-5px);
-            box-shadow:0 10px 24px rgba(0,0,0,0.1);
+
+        .skill-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
         }
-        footer{
-            text-align:center;
-            padding:40px;
-            color:#666;
+
+        .skill-card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: transform 0.45s ease, box-shadow 0.45s ease, border-color 0.45s ease;
+            position: relative;
+            overflow: hidden;
         }
-        @media (max-width:768px){
-            .hero{
-                grid-template-columns:1fr;
+
+        .skill-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, var(--glow), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 45px var(--glow);
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
+        }
+
+        .skill-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--text);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px var(--glow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-card p {
+            color: var(--subtext);
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-item {
+            background: var(--card);
+            padding: 28px 32px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 22px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, var(--glow), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(8px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 35px var(--glow);
+        }
+
+        .timeline-item:hover::before {
+            left: 100%;
+        }
+
+        .timeline-item h3 {
+            font-size: 21px;
+            margin-bottom: 8px;
+            color: var(--text);
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-time {
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-item p {
+            color: var(--subtext);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--subtext);
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 1rem 6%;
             }
-            .hero h1{
-                font-size:40px;
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
             }
-            header{
-                flex-direction:column;
-                gap:12px;
+
+            .hero h1 {
+                font-size: 44px;
             }
-            nav a{
-                margin:0 10px;
+
+            section {
+                padding: 120px 6%;
             }
         }
     </style>
@@ -158,49 +375,164 @@
         <a href="#home" class="brand">王嘉欣</a>
         <nav>
             <a href="#home">关于</a>
-            <a href="#skills">技能</a>
-            <a href="#works">作品</a>
+            <a href="#education">教育经历</a>
+            <a href="#skills">技能栈</a>
+            <a href="#hobby">兴趣爱好</a>
+            <a href="#works">项目作品</a>
             <a href="#contact">联系</a>
+            <button class="mode-toggle" id="modeToggle" title="切换夜间/白天模式">🌙</button>
         </nav>
     </header>
 
     <section id="home" class="hero">
-        <div>
+        <div class="reveal">
             <h1>王嘉欣</h1>
-            <p class="sub">大模型应用产业班 · 前端爱好者</p>
-            <p>广东科学技术职业学院<br>喜欢摄影、视觉设计与AI应用开发，持续学习网页、Python与大模型相关技术。</p>
+            <p class="sub">大模型应用产业班 · 前端与AI应用开发学习者</p>
+            <p>广东科学技术职业学院在读学生，专注于大模型应用开发、网页前端设计。
+            <br><br>
+            我喜欢把学习成果落地为可运行项目，从需求梳理、代码编写、BUG调试，到最终使用Git部署上线。
+            擅长结合视觉审美进行页面设计，将创意与代码结合，持续探索AI工具与前端开发的结合方向。
+            <br><br>
+            对待课程实践认真细致，习惯用版本管理工具记录每一次修改，锻炼工程化开发思维。</p>
         </div>
-        <div class="avatar-box">
-            <!-- 替换成你的头像图片路径 -->
-            <img src="assets/222.jpg" alt="头像">
+    </section>
+
+    <section id="education" class="reveal">
+        <h2>教育与学习经历</h2>
+        <p class="section-desc">在校学习专业课程，在实践项目中持续积累开发、设计相关能力。</p>
+
+        <div class="timeline-item">
+            <h3>广东科学技术职业学院 | 大模型应用产业班</h3>
+            <div class="timeline-time">2025.09 - 至今 · 在读</div>
+            <p>主修大模型应用开发、网页前端、Python程序开发、数据处理等课程。课程中练习HTML/CSS/JS网页开发，学习Git版本控制与GitHub Pages网站部署。
+            <br>积极参与课程实践作业，完成个人主页、数据处理脚本等项目，锻炼从设计到发布的完整开发流程。同时在校担任学生干事，锻炼沟通、策划与内容创作能力。</p>
         </div>
     </section>
 
     <section id="skills" class="reveal">
         <h2>技能栈</h2>
+        <p class="section-desc">在课程与项目中逐步掌握的开发、设计相关能力。</p>
+
         <div class="skill-list">
-            <div class="skill-card">HTML / CSS</div>
-            <div class="skill-card">JavaScript</div>
-            <div class="skill-card">Python</div>
-            <div class="skill-card">Git & GitHub Pages</div>
-            <div class="skill-card">AI大模型应用</div>
-            <div class="skill-card">图像视觉设计</div>
+            <div class="skill-card">
+                <h3>网页前端开发</h3>
+                <span class="tag">HTML5</span>
+                <span class="tag">CSS3</span>
+                <span class="tag">JavaScript</span>
+                <p>掌握页面布局、响应式适配、基础交互动画，能够独立完成静态个人网站开发。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>Python开发</h3>
+                <span class="tag">数据处理</span>
+                <span class="tag">脚本自动化</span>
+                <p>可以编写自动化统计脚本，读取数据、计算指标，自动生成周报文档。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>版本控制 & 部署</h3>
+                <span class="tag">Git</span>
+                <span class="tag">GitHub Pages</span>
+                <p>使用Git管理项目版本，提交、推送代码，将静态网页部署到公网访问。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>AI大模型应用</h3>
+                <span class="tag">提示词工程</span>
+                <span class="tag">应用开发</span>
+                <p>学习大模型调用、AI交互网页开发，结合Flask搭建简易对话应用。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>视觉设计</h3>
+                <span class="tag">排版</span>
+                <span class="tag">摄影</span>
+                <p>具备基础审美能力，负责页面配色、版式设计，擅长图片拍摄与内容视觉包装。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>软技能</h3>
+                <span class="tag">文档撰写</span>
+                <span class="tag">项目调试</span>
+                <p>能够梳理项目文档，排查代码BUG，拆解任务，完成完整项目交付。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="hobby" class="reveal">
+        <h2>兴趣爱好</h2>
+        <p class="section-desc">课余爱好，培养审美、创意，也为项目设计提供灵感。</p>
+
+        <div class="skill-list">
+            <div class="skill-card">
+                <h3>📷 摄影创作</h3>
+                <p>喜欢户外与人像拍摄，练习构图光影，积累视觉素材，提升页面设计审美。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>🎨 视觉平面设计</h3>
+                <p>研究配色、版式，学习图文排版，把设计思路运用到网页界面开发。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>💡 AI工具探索</h3>
+                <p>持续体验各类AI生成工具，尝试把AI能力融入到自己的项目开发中。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>✍ 文案撰写</h3>
+                <p>撰写活动推文、项目介绍，锻炼文字表达能力，用于项目文档与网页文案。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>🚶 城市漫游</h3>
+                <p>外出采风，观察生活里的色彩与设计，收集灵感，放松身心。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>☕ 阅读学习</h3>
+                <p>阅读技术、设计类文章，持续拓展知识面，保持学习习惯。</p>
+            </div>
         </div>
     </section>
 
     <section id="works" class="reveal">
         <h2>项目作品</h2>
+        <p class="section-desc">课程实践项目，每一个项目都完整经历需求、编码、调试、版本管理、部署发布。</p>
+
         <div class="skill-list">
-            <div class="skill-card">个人主页（当前网站）</div>
-            <div class="skill-card">博主运营数据周报Python脚本</div>
-            <div class="skill-card">Flask简易AI聊天网页</div>
+            <div class="skill-card">
+                <h3>个人简历主页（本站）</h3>
+                <span class="tag">HTML/CSS/JS</span>
+                <span class="tag">GitHub Pages</span>
+                <p>静态个人展示网站，包含简历、技能、作品板块，自带滚动动画，响应式适配手机电脑。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>博主运营周报Python脚本</h3>
+                <span class="tag">Python</span>
+                <span class="tag">数据统计</span>
+                <p>自动读取博主短视频数据，计算点赞、评论、互动率，输出Markdown格式运营周报。</p>
+            </div>
+
+            <div class="skill-card">
+                <h3>Flask简易AI聊天网页</h3>
+                <span class="tag">Flask</span>
+                <span class="tag">前后端交互</span>
+                <p>搭建后端服务，实现网页端和AI对话，模拟流式输出，完成简易大模型web应用。</p>
+            </div>
         </div>
     </section>
 
     <section id="contact" class="reveal">
         <h2>联系方式</h2>
-        <p>邮箱：xxx@xxx.com</p>
-        <p>GitHub：github.com/wd456-dew</p>
+        <p class="section-desc">欢迎交流前端、AI应用、网页开发相关想法，一起学习交流。</p>
+
+        <div class="timeline-item">
+            <p><strong>邮箱：</strong>wangjiacheng@outlook.com</p>
+            <p><strong>GitHub：</strong>github.com/wd456-dew</p>
+            <p style="margin-top:12px;">如果你对我的项目感兴趣，欢迎通过GitHub查看源码，交流代码问题与开发思路。</p>
+        </div>
     </section>
 
     <footer>
@@ -208,16 +540,29 @@
     </footer>
 
     <script>
-        // 滚动检测，区块淡入
+        const modeToggle = document.getElementById("modeToggle");
+
+        modeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("night");
+
+            if (document.body.classList.contains("night")) {
+                modeToggle.textContent = "☀️";
+            } else {
+                modeToggle.textContent = "🌙";
+            }
+        });
+
         const revealItems = document.querySelectorAll('.reveal');
-        function checkReveal(){
-            revealItems.forEach(item=>{
+
+        function checkReveal() {
+            revealItems.forEach(item => {
                 const rect = item.getBoundingClientRect();
-                if(rect.top < window.innerHeight * 0.82){
+                if (rect.top < window.innerHeight * 0.82) {
                     item.classList.add('active');
                 }
-            })
+            });
         }
+
         window.addEventListener('scroll', checkReveal);
         window.addEventListener('load', checkReveal);
     </script>
